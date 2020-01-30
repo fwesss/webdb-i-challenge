@@ -1,93 +1,102 @@
 {
-  "openapi" : "3.0.0",
-  "info" : {
-    "title" : "Accounts API",
-    "description" : "Accounts API",
-    "contact" : {
-      "email" : "feller.westley@gmail.com"
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Accounts API",
+    "description": "Accounts API",
+    "contact": {
+      "email": "feller.westley@gmail.com"
     },
-    "version" : "1.0.0"
+    "version": "1.0.0"
   },
-  "servers" : [ {
-    "url" : "https://virtserver.swaggerhub.com/fwesss/webdb-i-challenge/1.0.0",
-    "description" : "SwaggerHub API Auto Mocking"
-  } ],
-  "paths" : {
-    "/accounts" : {
-      "get" : {
-        "summary" : "retrieves all accounts",
-        "description" : "Get a list of all accounts",
-        "operationId" : "retrieveAllAccounts",
-        "responses" : {
-          "200" : {
-            "description" : "all accounts",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "array",
-                  "items" : {
-                    "$ref" : "#/components/schemas/Account"
+  "servers": [
+    {
+      "url": "https://virtserver.swaggerhub.com/fwesss/webdb-i-challenge/1.0.0",
+      "description": "SwaggerHub API Auto Mocking"
+    }
+  ],
+  "paths": {
+    "/accounts": {
+      "get": {
+        "summary": "retrieves all accounts",
+        "description": "Get a list of all accounts",
+        "operationId": "retrieveAllAccounts",
+        "responses": {
+          "200": {
+            "description": "all accounts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Account"
                   }
                 }
               }
             }
           },
-          "500" : {
-            "description" : "server error",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_500"
+          "500": {
+            "description": "server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_500"
                 }
               }
             }
           }
         }
       },
-      "post" : {
-        "summary" : "adds an account",
-        "description" : "Adds an account to the database",
-        "operationId" : "addAccount",
-        "requestBody" : {
-          "description" : "account to add",
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/body"
+      "post": {
+        "summary": "adds an account",
+        "description": "Adds an account to the database",
+        "operationId": "addAccount",
+        "requestBody": {
+          "description": "account to add",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/body"
               }
             }
           }
         },
-        "responses" : {
-          "201" : {
-            "description" : "item created",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_201"
+        "responses": {
+          "201": {
+            "description": "item created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_201"
                 }
               }
             }
           },
-          "400" : {
-            "description" : "invalid input, object invalid",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_400"
+          "400": {
+            "description": "invalid input, object invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
                 }
               }
             }
           },
-          "409" : {
-            "description" : "an existing account with that name already exists"
+          "409": {
+            "description": "an existing account with that name already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_409"
+                }
+              }
+            }
           },
-          "500" : {
-            "description" : "server error",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_500_1"
+          "500": {
+            "description": "server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_500_1"
                 }
               }
             }
@@ -95,171 +104,187 @@
         }
       }
     },
-    "/accounts/{id}" : {
-      "get" : {
-        "summary" : "retrieves a specified account",
-        "description" : "Get one account",
-        "operationId" : "retrieveOneAccount",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "path",
-          "description" : "The account ID",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "minimum" : 1,
-            "type" : "integer",
-            "example" : 2
+    "/accounts/{id}": {
+      "get": {
+        "summary": "retrieves a specified account",
+        "description": "Get one account",
+        "operationId": "retrieveOneAccount",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The account ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "minimum": 1,
+              "type": "integer",
+              "example": 2
+            }
           }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "one account",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_200"
+        ],
+        "responses": {
+          "200": {
+            "description": "one account",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200"
                 }
               }
             }
           },
-          "404" : {
-            "description" : "invalid id",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_404"
+          "404": {
+            "description": "invalid id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             }
           },
-          "500" : {
-            "description" : "server error",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_500"
+          "500": {
+            "description": "server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_500"
                 }
               }
             }
           }
         }
       },
-      "put" : {
-        "summary" : "updates an account",
-        "description" : "Updates an account in the database",
-        "operationId" : "updateOneAccount",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "path",
-          "description" : "The account ID",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "minimum" : 1,
-            "type" : "integer",
-            "example" : 2
+      "put": {
+        "summary": "updates an account",
+        "description": "Updates an account in the database",
+        "operationId": "updateOneAccount",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The account ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "minimum": 1,
+              "type": "integer",
+              "example": 2
+            }
           }
-        } ],
-        "requestBody" : {
-          "description" : "account to update",
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/body_1"
+        ],
+        "requestBody": {
+          "description": "account to update",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/body_1"
               }
             }
           }
         },
-        "responses" : {
-          "200" : {
-            "description" : "item updated",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_200_1"
+        "responses": {
+          "200": {
+            "description": "item updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_1"
                 }
               }
             }
           },
-          "400" : {
-            "description" : "invalid input, object invalid",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_400"
+          "400": {
+            "description": "invalid input, object invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
                 }
               }
             }
           },
-          "404" : {
-            "description" : "invalid id",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_404"
+          "404": {
+            "description": "invalid id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             }
           },
-          "500" : {
-            "description" : "server error",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_500_2"
+          "409": {
+            "description": "an existing account with that name already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_409"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_500_2"
                 }
               }
             }
           }
         }
       },
-      "delete" : {
-        "summary" : "deletes an account",
-        "description" : "Deletes an account in the database",
-        "operationId" : "deleteOneAccount",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "path",
-          "description" : "The account ID",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "minimum" : 1,
-            "type" : "integer",
-            "example" : 2
+      "delete": {
+        "summary": "deletes an account",
+        "description": "Deletes an account in the database",
+        "operationId": "deleteOneAccount",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The account ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "minimum": 1,
+              "type": "integer",
+              "example": 2
+            }
           }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "item deleted",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_200_2"
+        ],
+        "responses": {
+          "200": {
+            "description": "item deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_2"
                 }
               }
             }
           },
-          "404" : {
-            "description" : "invalid id",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_404"
+          "404": {
+            "description": "invalid id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             }
           },
-          "500" : {
-            "description" : "server error",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/inline_response_500_2"
+          "500": {
+            "description": "server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_500_2"
                 }
               }
             }
@@ -268,164 +293,173 @@
       }
     }
   },
-  "components" : {
-    "schemas" : {
-      "Account" : {
-        "required" : [ "budget", "id", "name" ],
-        "type" : "object",
-        "properties" : {
-          "id" : {
-            "type" : "integer",
-            "example" : 1
+  "components": {
+    "schemas": {
+      "Account": {
+        "required": ["budget", "id", "name"],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
           },
-          "name" : {
-            "type" : "string",
-            "example" : "ACME INC"
+          "name": {
+            "type": "string",
+            "example": "ACME INC"
           },
-          "budget" : {
-            "type" : "integer",
-            "example" : 4267
+          "budget": {
+            "type": "integer",
+            "example": 4267
           }
         }
       },
-      "inline_response_500" : {
-        "type" : "object",
-        "properties" : {
-          "error" : {
-            "type" : "string",
-            "example" : "The information could not be retrieved"
+      "inline_response_500": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "example": "The information could not be retrieved"
           }
         }
       },
-      "body" : {
-        "required" : [ "budget", "name" ],
-        "type" : "object",
-        "properties" : {
-          "name" : {
-            "type" : "string",
-            "example" : "ACME INC"
+      "body": {
+        "required": ["budget", "name"],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "ACME INC"
           },
-          "budget" : {
-            "type" : "integer",
-            "example" : 4267
+          "budget": {
+            "type": "integer",
+            "example": 4267
           }
         }
       },
-      "inline_response_201" : {
-        "uniqueItems" : true,
-        "required" : [ "budget", "id", "name" ],
-        "type" : "object",
-        "properties" : {
-          "id" : {
-            "type" : "integer",
-            "example" : 1
+      "inline_response_201": {
+        "uniqueItems": true,
+        "required": ["budget", "id", "name"],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
           },
-          "name" : {
-            "type" : "string",
-            "example" : "ACME INC"
+          "name": {
+            "type": "string",
+            "example": "ACME INC"
           },
-          "budget" : {
-            "type" : "integer",
-            "example" : 4267
+          "budget": {
+            "type": "integer",
+            "example": 4267
           }
         }
       },
-      "inline_response_400" : {
-        "type" : "object",
-        "properties" : {
-          "errors" : {
-            "type" : "array",
-            "example" : [ "Missing name", "Missing budget" ],
-            "items" : {
-              "type" : "string"
+      "inline_response_400": {
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "example": ["Missing name", "Missing budget"],
+            "items": {
+              "type": "string"
             }
           }
         }
       },
-      "inline_response_500_1" : {
-        "type" : "object",
-        "properties" : {
-          "error" : {
-            "type" : "string",
-            "example" : "The information could not be added"
+      "inline_response_409": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "example": "This account already exists"
           }
         }
       },
-      "inline_response_200" : {
-        "required" : [ "budget", "id", "name" ],
-        "type" : "object",
-        "properties" : {
-          "id" : {
-            "type" : "integer",
-            "example" : 2
+      "inline_response_500_1": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "example": "The information could not be added"
+          }
+        }
+      },
+      "inline_response_200": {
+        "required": ["budget", "id", "name"],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 2
           },
-          "name" : {
-            "type" : "string",
-            "example" : "Big Corp"
+          "name": {
+            "type": "string",
+            "example": "Big Corp"
           },
-          "budget" : {
-            "type" : "integer",
-            "example" : 6577
+          "budget": {
+            "type": "integer",
+            "example": 6577
           }
         }
       },
-      "inline_response_404" : {
-        "type" : "object",
-        "properties" : {
-          "error" : {
-            "type" : "string",
-            "example" : "Invalid account ID"
+      "inline_response_404": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "example": "Invalid account ID"
           }
         }
       },
-      "body_1" : {
-        "required" : [ "budget", "name" ],
-        "type" : "object",
-        "properties" : {
-          "name" : {
-            "type" : "string",
-            "example" : "Giant Corp"
+      "body_1": {
+        "required": ["budget", "name"],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Giant Corp"
           },
-          "budget" : {
-            "type" : "integer",
-            "example" : 4500
+          "budget": {
+            "type": "integer",
+            "example": 4500
           }
         }
       },
-      "inline_response_200_1" : {
-        "uniqueItems" : true,
-        "required" : [ "budget", "id", "name" ],
-        "type" : "object",
-        "properties" : {
-          "id" : {
-            "type" : "integer",
-            "example" : 2
+      "inline_response_200_1": {
+        "uniqueItems": true,
+        "required": ["budget", "id", "name"],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 2
           },
-          "name" : {
-            "type" : "string",
-            "example" : "Giant Corp"
+          "name": {
+            "type": "string",
+            "example": "Giant Corp"
           },
-          "budget" : {
-            "type" : "integer",
-            "example" : 4500
+          "budget": {
+            "type": "integer",
+            "example": 4500
           }
         }
       },
-      "inline_response_500_2" : {
-        "type" : "object",
-        "properties" : {
-          "error" : {
-            "type" : "string",
-            "example" : "The information could not be updated"
+      "inline_response_500_2": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "example": "The information could not be updated"
           }
         }
       },
-      "inline_response_200_2" : {
-        "type" : "object",
-        "properties" : {
-          "success" : {
-            "type" : "string",
-            "example" : "Account has been deleted"
+      "inline_response_200_2": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "string",
+            "example": "Account has been deleted"
           }
         }
       }
