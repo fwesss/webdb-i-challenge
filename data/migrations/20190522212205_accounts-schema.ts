@@ -1,7 +1,6 @@
 import Knex, { SchemaBuilder } from 'knex'
 
 export const up = (knex: Knex): SchemaBuilder =>
-  // eslint-disable-next-line arrow-body-style
   knex.schema.createTable('accounts', tbl => {
     tbl.increments()
     tbl
