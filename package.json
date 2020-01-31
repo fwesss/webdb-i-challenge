@@ -28,6 +28,7 @@
     ]
   },
   "dependencies": {
+    "db-errors": "^0.2.3",
     "express": "^4.17.1",
     "folktale": "^2.3.2",
     "fp-ts": "^2.4.3",
