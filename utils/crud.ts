@@ -1,13 +1,13 @@
-import { error as logError } from 'console'
 import { Request, Response } from 'express'
 import { QueryBuilder } from 'knex'
 import { Id, Account } from '../resources/accounts/accounts.model'
+import dbErrorHandler from './dbErrorHandler'
 
 type Model = {
   findAll: () => QueryBuilder
   findById: (id: Id) => QueryBuilder
-  insert: (account: Account) => Promise<number>
-  update: (id: Id) => (account: Account) => QueryBuilder
+  insert: (account: Account) => Promise<QueryBuilder>
+  update: (id: Id, account: Account) => Promise<QueryBuilder | null>
   remove: (id: Id) => QueryBuilder
 }
 
@@ -21,8 +21,7 @@ export const getMany = (
     const items = await model.findAll()
     res.status(200).json(items)
   } catch (error) {
-    logError(error)
-    res.status(500).json({ error: 'The information could not be retrieved' })
+    dbErrorHandler(error, res)
   }
 }
 
@@ -34,16 +33,9 @@ export const getOne = (
 ): Promise<void> => {
   try {
     const item = await model.findById(req.params.id)
-    if (item) {
-      res.status(200).json(item)
-    } else {
-      res.status(404).json({
-        message: 'The item with the specified ID does not exist.',
-      })
-    }
+    res.status(200).json(item)
   } catch (error) {
-    logError(error)
-    res.status(500).json({ error: 'The information could not be retrieved' })
+    dbErrorHandler(error, res)
   }
 }
 
@@ -57,8 +49,7 @@ export const createOne = (
     const item = await model.insert(req.body)
     res.status(201).json(item)
   } catch (error) {
-    logError(error)
-    res.status(500).json({ error: 'The information could not be added' })
+    dbErrorHandler(error, res)
   }
 }
 
@@ -69,17 +60,10 @@ export const updateOne = (
   res: Response
 ): Promise<void> => {
   try {
-    const updated = await model.update(req.params.id)(req.body)
-    if (updated) {
-      res.status(200).json(updated)
-    } else {
-      res.status(404).json({
-        message: 'The item with the specified ID does not exist',
-      })
-    }
+    const updated = await model.update(req.params.id, req.body)
+    res.status(200).json(updated)
   } catch (error) {
-    logError(error)
-    res.status(500).json({ error: 'The information could not be updated' })
+    dbErrorHandler(error, res)
   }
 }
 
@@ -90,17 +74,10 @@ export const removeOne = (
   res: Response
 ): Promise<void> => {
   try {
-    const count = await model.remove(req.params.id)
-    if (count) {
-      res.status(200).json({ message: `This item has been deleted` })
-    } else {
-      res.status(404).json({
-        message: 'The item with the specified ID does not exist',
-      })
-    }
+    await model.remove(req.params.id)
+    res.status(200).json({ message: `This item has been deleted` })
   } catch (error) {
-    logError(error)
-    res.status(500).json({ error: 'The information could not be modified' })
+    dbErrorHandler(error, res)
   }
 }
 
