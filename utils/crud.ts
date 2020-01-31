@@ -22,7 +22,7 @@ export const getMany = (
     res.status(200).json(items)
   } catch (error) {
     logError(error)
-    res.status(500).json({ error: 'The information could not be retrieved.' })
+    res.status(500).json({ error: 'The information could not be retrieved' })
   }
 }
 
@@ -43,7 +43,7 @@ export const getOne = (
     }
   } catch (error) {
     logError(error)
-    res.status(500).json({ error: 'The information could not be retrieved.' })
+    res.status(500).json({ error: 'The information could not be retrieved' })
   }
 }
 
@@ -58,7 +58,7 @@ export const createOne = (
     res.status(201).json(item)
   } catch (error) {
     logError(error)
-    res.status(500).json({ error: 'The information could not be posted.' })
+    res.status(500).json({ error: 'The information could not be added' })
   }
 }
 
@@ -74,12 +74,12 @@ export const updateOne = (
       res.status(200).json(updated)
     } else {
       res.status(404).json({
-        message: 'The item with the specified ID does not exist.',
+        message: 'The item with the specified ID does not exist',
       })
     }
   } catch (error) {
     logError(error)
-    res.status(500).json({ error: 'The information could not be modified.' })
+    res.status(500).json({ error: 'The information could not be updated' })
   }
 }
 
@@ -95,12 +95,12 @@ export const removeOne = (
       res.status(200).json({ message: `This item has been deleted` })
     } else {
       res.status(404).json({
-        message: 'The item with the specified ID does not exist.',
+        message: 'The item with the specified ID does not exist',
       })
     }
   } catch (error) {
     logError(error)
-    res.status(500).json({ error: 'The information could not be modified.' })
+    res.status(500).json({ error: 'The information could not be modified' })
   }
 }
 

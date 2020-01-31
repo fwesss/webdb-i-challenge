@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express'
 import Validation from 'folktale/validation'
 import { error as logError } from 'console'
-import { findById } from './accounts.model'
+import { findById, findByName } from './accounts.model'
 import { validator, didItValidate } from '../../utils/validator'
 import controllers from './accounts.controllers'
 
@@ -29,11 +29,44 @@ const validateAccount = (
   res: Response,
   next: NextFunction
 ): void => {
-  const didProjectValidate = didItValidate(accountValidationResult(req))
-  if (!didProjectValidate) {
+  const didAccountValidate = didItValidate(accountValidationResult(req))
+  if (!didAccountValidate) {
     res.status(400).json({ errors: accountValidationResult(req).value })
   } else {
     next()
+  }
+}
+
+const validateNotDuplicate = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const count = await findByName(req.body.name)
+    if (count) {
+      res.status(409).json({ error: 'This account name already exists' })
+    } else {
+      next()
+    }
+  } catch (error) {
+    logError(error)
+    res
+      .status(500)
+      .json({ error: 'Account information could not be retrieved' })
+  }
+}
+
+const checkNameChange = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  const account = await findById(req.params.id)
+  if (account.name === req.body.name) {
+    next()
+  } else {
+    validateNotDuplicate(req, res, next)
   }
 }
 
@@ -62,12 +95,12 @@ router.use('/:id', validateAccountId)
 router
   .route('/')
   .get(controllers.getMany)
-  .post(validateAccount, controllers.createOne)
+  .post(validateAccount, validateNotDuplicate, controllers.createOne)
 
 router
   .route('/:id')
   .get(controllers.getOne)
-  .put(validateAccount, controllers.updateOne)
+  .put(validateAccount, checkNameChange, controllers.updateOne)
   .delete(controllers.removeOne)
 
 export default router

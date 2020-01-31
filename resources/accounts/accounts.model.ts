@@ -15,6 +15,11 @@ export const findById = (id: Id): QueryBuilder =>
     .where({ id: Number(id) })
     .first()
 
+export const findByName = (name: string): QueryBuilder =>
+  db('accounts')
+    .where('name', name)
+    .first()
+
 export const insert = async (account: Account): Promise<number> =>
   (await db('accounts').insert(account))[0]
 
