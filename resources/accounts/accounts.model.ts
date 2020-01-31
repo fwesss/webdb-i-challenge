@@ -1,14 +1,16 @@
 import { QueryBuilder } from 'knex'
 import db from '../../data/dbConfig'
 
-type Account = {
+export type Account = {
   readonly name: string
   readonly budget: number
 }
 
+export type Id = number | string
+
 export const findAll = (): QueryBuilder => db('accounts')
 
-export const findById = (id: number | string): QueryBuilder =>
+export const findById = (id: Id): QueryBuilder =>
   db('accounts')
     .where({ id: Number(id) })
     .first()
@@ -16,14 +18,12 @@ export const findById = (id: number | string): QueryBuilder =>
 export const insert = async (account: Account): Promise<number> =>
   (await db('accounts').insert(account))[0]
 
-export const update = (id: number | string) => (
-  account: Account
-): QueryBuilder =>
+export const update = (id: Id) => (account: Account): QueryBuilder =>
   db('accounts')
     .where('id', Number(id))
     .update(account)
 
-export const remove = (id: number | string): QueryBuilder =>
+export const remove = (id: Id): QueryBuilder =>
   db('accounts')
     .where('id', Number(id))
     .del()

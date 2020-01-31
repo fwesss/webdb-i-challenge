@@ -7,7 +7,7 @@ import express, {
 } from 'express'
 import morgan from 'morgan'
 import { serve, setup } from 'swagger-ui-express'
-// import accountsRouter from './resources/accounts/accounts.router'
+import accountsRouter from './resources/accounts/accounts.router'
 
 import swaggerDocument from './openapi.json'
 
@@ -31,7 +31,7 @@ server.use(morgan('dev'))
 server.use(json())
 server.use(jsonSyntaxErrorHandler)
 
-// server.use('/api/projects', accountsRouter)
+server.use('/api/accounts', accountsRouter)
 
 server.get('/', (_req, res) => res.send(`<h1>Node API Challenge</h1>`))
 

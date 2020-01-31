@@ -5,11 +5,11 @@
   "main": "./build/index.js",
   "scripts": {
     "check-format": "yarn run prettier --ignore-path .eslintignore --list-different",
-    "check-types": "tsc",
+    "check-types": "tsc --watch",
     "format": "yarn run prettier --ignore-path .eslintignore --write",
     "lint": "eslint --ext .ts .",
     "prettier": "prettier --ignore-path .eslintignore \"**/*.+(json|js|ts)\"",
-    "server": "yarn run check-types && nodemon ./build/index.js",
+    "server": "nodemon ./build/index.js",
     "validate": "npm-run-all --parallel check-format lint"
   },
   "husky": {
