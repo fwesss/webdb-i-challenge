@@ -20,13 +20,19 @@ export const findByName = (name: string): QueryBuilder =>
     .where('name', name)
     .first()
 
-export const insert = async (account: Account): Promise<number> =>
-  (await db('accounts').insert(account))[0]
+export const insert = (account: Account): Promise<QueryBuilder> =>
+  db('accounts')
+    .insert(account, 'id')
+    .then(([id]) => findById(id))
 
-export const update = (id: Id) => (account: Account): QueryBuilder =>
+export const update = (
+  id: Id,
+  account: Account
+): Promise<QueryBuilder | null> =>
   db('accounts')
     .where('id', Number(id))
     .update(account)
+    .then(count => (count > 0 ? findById(id) : null))
 
 export const remove = (id: Id): QueryBuilder =>
   db('accounts')

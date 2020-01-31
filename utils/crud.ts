@@ -6,8 +6,8 @@ import dbErrorHandler from './dbErrorHandler'
 type Model = {
   findAll: () => QueryBuilder
   findById: (id: Id) => QueryBuilder
-  insert: (account: Account) => Promise<number>
-  update: (id: Id) => (account: Account) => QueryBuilder
+  insert: (account: Account) => Promise<QueryBuilder>
+  update: (id: Id, account: Account) => Promise<QueryBuilder | null>
   remove: (id: Id) => QueryBuilder
 }
 
@@ -60,7 +60,7 @@ export const updateOne = (
   res: Response
 ): Promise<void> => {
   try {
-    const updated = await model.update(req.params.id)(req.body)
+    const updated = await model.update(req.params.id, req.body)
     res.status(200).json(updated)
   } catch (error) {
     dbErrorHandler(error, res)
