@@ -11,9 +11,7 @@ type Model = {
   remove: (id: Id) => QueryBuilder
 }
 
-export const getMany = (
-  model: Model
-): ((_req: Request, res: Response) => Promise<void>) => async (
+export const getMany = (model: Model) => async (
   req: Request,
   res: Response
 ): Promise<void> => {
@@ -26,9 +24,7 @@ export const getMany = (
   }
 }
 
-export const getOne = (
-  model: Model
-): ((req: Request, res: Response) => Promise<void>) => async (
+export const getOne = (model: Model) => async (
   req: Request,
   res: Response
 ): Promise<void> => {
@@ -40,9 +36,7 @@ export const getOne = (
   }
 }
 
-export const createOne = (
-  model: Model
-): ((req: Request, res: Response) => Promise<void>) => async (
+export const createOne = (model: Model) => async (
   req: Request,
   res: Response
 ): Promise<void> => {
@@ -54,9 +48,7 @@ export const createOne = (
   }
 }
 
-export const updateOne = (
-  model: Model
-): ((req: Request, res: Response) => Promise<void>) => async (
+export const updateOne = (model: Model) => async (
   req: Request,
   res: Response
 ): Promise<void> => {
@@ -68,9 +60,7 @@ export const updateOne = (
   }
 }
 
-export const removeOne = (
-  model: Model
-): ((req: Request, res: Response) => Promise<void>) => async (
+export const removeOne = (model: Model) => async (
   req: Request,
   res: Response
 ): Promise<void> => {
