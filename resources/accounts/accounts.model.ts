@@ -8,7 +8,14 @@ export type Account = {
 
 export type Id = number | string
 
-export const findAll = (): QueryBuilder => db('accounts')
+export const findAll = (
+  limit: number,
+  sortBy = 'id',
+  sortDir = 'asc'
+): QueryBuilder =>
+  db('accounts')
+    .limit(limit)
+    .orderBy(sortBy, sortDir)
 
 export const findById = (id: Id): QueryBuilder =>
   db('accounts')
@@ -32,7 +39,7 @@ export const update = (
   db('accounts')
     .where('id', Number(id))
     .update(account)
-    .then(count => (count > 0 ? findById(id) : null))
+    .then(count => count > 0 && findById(id))
 
 export const remove = (id: Id): QueryBuilder =>
   db('accounts')

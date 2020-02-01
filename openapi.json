@@ -1,25 +1,53 @@
 {
   "openapi": "3.0.0",
-  "info": {
-    "title": "Accounts API",
-    "description": "Accounts API",
-    "contact": {
-      "email": "feller.westley@gmail.com"
-    },
-    "version": "1.0.0"
-  },
   "servers": [
     {
-      "url": "https://virtserver.swaggerhub.com/fwesss/webdb-i-challenge/1.0.0",
-      "description": "SwaggerHub API Auto Mocking"
+      "url": "/api"
     }
   ],
+  "info": {
+    "description": "Accounts API",
+    "version": "1.1.0",
+    "title": "Accounts API",
+    "contact": {
+      "email": "feller.westley@gmail.com"
+    }
+  },
   "paths": {
     "/accounts": {
       "get": {
         "summary": "retrieves all accounts",
-        "description": "Get a list of all accounts",
         "operationId": "retrieveAllAccounts",
+        "description": "Get a list of all accounts",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The number of accounts to return",
+            "example": 5
+          },
+          {
+            "in": "query",
+            "name": "sortby",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The column to sort the accounts by",
+            "example": "budget"
+          },
+          {
+            "in": "query",
+            "name": "sortdir",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The direction to sort the accounts",
+            "example": "desc"
+          }
+        ],
         "responses": {
           "200": {
             "description": "all accounts",
@@ -28,7 +56,216 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Account"
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "budget": {
+                        "type": "integer"
+                      }
+                    }
+                  },
+                  "example": [
+                    {
+                      "id": 12,
+                      "name": "Ultra Corp",
+                      "budget": 54000
+                    },
+                    {
+                      "id": 2,
+                      "name": "Big Company",
+                      "budget": 47620
+                    },
+                    {
+                      "id": 3,
+                      "name": "Not So Great Inc",
+                      "budget": 36570
+                    },
+                    {
+                      "id": 37,
+                      "name": "Super Duper Mart",
+                      "budget": 2500
+                    },
+                    {
+                      "id": 6,
+                      "name": "Cheapr",
+                      "budget": 120
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "The information could not be retrieved"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "adds an account",
+        "operationId": "addAccount",
+        "description": "Adds an account to the database",
+        "responses": {
+          "201": {
+            "description": "item created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["id", "name", "budget"],
+                  "uniqueItems": true,
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "ACME INC"
+                    },
+                    "budget": {
+                      "type": "integer",
+                      "example": 4267
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "invalid request object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "example": ["Missing name", "Missing budget"]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "name of accounts must be unique"
+          },
+          "500": {
+            "description": "server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "The information could not be added"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name", "budget"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "ACME INC"
+                  },
+                  "budget": {
+                    "type": "integer",
+                    "example": 4267
+                  }
+                }
+              }
+            }
+          },
+          "description": "account to add"
+        }
+      }
+    },
+    "/accounts/{id}": {
+      "get": {
+        "summary": "retrieves a specified account",
+        "operationId": "retrieveOneAccount",
+        "description": "Get one account",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "example": 2
+            },
+            "description": "The account ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "one account",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["id", "name", "budget"],
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "example": 2
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Big Corp"
+                    },
+                    "budget": {
+                      "type": "integer",
+                      "example": 6577
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "invalid id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid account ID"
+                    }
                   }
                 }
               }
@@ -39,118 +276,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/inline_response_500"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "summary": "adds an account",
-        "description": "Adds an account to the database",
-        "operationId": "addAccount",
-        "requestBody": {
-          "description": "account to add",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/body"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "item created",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_201"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "invalid input, object invalid",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_400"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "an existing account with that name already exists",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_409"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_500_1"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/accounts/{id}": {
-      "get": {
-        "summary": "retrieves a specified account",
-        "description": "Get one account",
-        "operationId": "retrieveOneAccount",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "The account ID",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "minimum": 1,
-              "type": "integer",
-              "example": 2
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "one account",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_200"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "invalid id",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_404"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_500"
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "The information could not be retrieved"
+                    }
+                  }
                 }
               }
             }
@@ -159,40 +291,44 @@
       },
       "put": {
         "summary": "updates an account",
-        "description": "Updates an account in the database",
         "operationId": "updateOneAccount",
+        "description": "Updates an account in the database",
         "parameters": [
           {
-            "name": "id",
             "in": "path",
-            "description": "The account ID",
+            "name": "id",
             "required": true,
-            "style": "simple",
-            "explode": false,
             "schema": {
-              "minimum": 1,
               "type": "integer",
+              "minimum": 1,
               "example": 2
-            }
+            },
+            "description": "The account ID"
           }
         ],
-        "requestBody": {
-          "description": "account to update",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/body_1"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "item updated",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/inline_response_200_1"
+                  "type": "object",
+                  "required": ["id", "name", "budget"],
+                  "uniqueItems": true,
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "example": 2
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Giant Corp"
+                    },
+                    "budget": {
+                      "type": "integer",
+                      "example": 4500
+                    }
+                  }
                 }
               }
             }
@@ -202,7 +338,16 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/inline_response_400"
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "example": ["Missing name", "Missing budget"]
+                    }
+                  }
                 }
               }
             }
@@ -212,7 +357,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/inline_response_404"
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid account ID"
+                    }
+                  }
                 }
               }
             }
@@ -222,7 +373,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/inline_response_409"
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "This account already exists"
+                    }
+                  }
                 }
               }
             }
@@ -232,30 +389,55 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/inline_response_500_2"
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "The information could not be updated"
+                    }
+                  }
                 }
               }
             }
           }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name", "budget"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Giant Corp"
+                  },
+                  "budget": {
+                    "type": "integer",
+                    "example": 4500
+                  }
+                }
+              }
+            }
+          },
+          "description": "account to update"
         }
       },
       "delete": {
         "summary": "deletes an account",
-        "description": "Deletes an account in the database",
         "operationId": "deleteOneAccount",
+        "description": "Deletes an account in the database",
         "parameters": [
           {
-            "name": "id",
             "in": "path",
-            "description": "The account ID",
+            "name": "id",
             "required": true,
-            "style": "simple",
-            "explode": false,
             "schema": {
-              "minimum": 1,
               "type": "integer",
+              "minimum": 1,
               "example": 2
-            }
+            },
+            "description": "The account ID"
           }
         ],
         "responses": {
@@ -264,7 +446,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/inline_response_200_2"
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "string",
+                      "example": "Account has been deleted"
+                    }
+                  }
                 }
               }
             }
@@ -274,7 +462,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/inline_response_404"
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid account ID"
+                    }
+                  }
                 }
               }
             }
@@ -284,7 +478,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/inline_response_500_2"
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "The information could not be updated"
+                    }
+                  }
                 }
               }
             }
@@ -296,8 +496,8 @@
   "components": {
     "schemas": {
       "Account": {
-        "required": ["budget", "id", "name"],
         "type": "object",
+        "required": ["id", "name", "budget"],
         "properties": {
           "id": {
             "type": "integer",
@@ -310,156 +510,6 @@
           "budget": {
             "type": "integer",
             "example": 4267
-          }
-        }
-      },
-      "inline_response_500": {
-        "type": "object",
-        "properties": {
-          "error": {
-            "type": "string",
-            "example": "The information could not be retrieved"
-          }
-        }
-      },
-      "body": {
-        "required": ["budget", "name"],
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "example": "ACME INC"
-          },
-          "budget": {
-            "type": "integer",
-            "example": 4267
-          }
-        }
-      },
-      "inline_response_201": {
-        "uniqueItems": true,
-        "required": ["budget", "id", "name"],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "example": 1
-          },
-          "name": {
-            "type": "string",
-            "example": "ACME INC"
-          },
-          "budget": {
-            "type": "integer",
-            "example": 4267
-          }
-        }
-      },
-      "inline_response_400": {
-        "type": "object",
-        "properties": {
-          "errors": {
-            "type": "array",
-            "example": ["Missing name", "Missing budget"],
-            "items": {
-              "type": "string"
-            }
-          }
-        }
-      },
-      "inline_response_409": {
-        "type": "object",
-        "properties": {
-          "error": {
-            "type": "string",
-            "example": "This account already exists"
-          }
-        }
-      },
-      "inline_response_500_1": {
-        "type": "object",
-        "properties": {
-          "error": {
-            "type": "string",
-            "example": "The information could not be added"
-          }
-        }
-      },
-      "inline_response_200": {
-        "required": ["budget", "id", "name"],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "example": 2
-          },
-          "name": {
-            "type": "string",
-            "example": "Big Corp"
-          },
-          "budget": {
-            "type": "integer",
-            "example": 6577
-          }
-        }
-      },
-      "inline_response_404": {
-        "type": "object",
-        "properties": {
-          "error": {
-            "type": "string",
-            "example": "Invalid account ID"
-          }
-        }
-      },
-      "body_1": {
-        "required": ["budget", "name"],
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "example": "Giant Corp"
-          },
-          "budget": {
-            "type": "integer",
-            "example": 4500
-          }
-        }
-      },
-      "inline_response_200_1": {
-        "uniqueItems": true,
-        "required": ["budget", "id", "name"],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "example": 2
-          },
-          "name": {
-            "type": "string",
-            "example": "Giant Corp"
-          },
-          "budget": {
-            "type": "integer",
-            "example": 4500
-          }
-        }
-      },
-      "inline_response_500_2": {
-        "type": "object",
-        "properties": {
-          "error": {
-            "type": "string",
-            "example": "The information could not be updated"
-          }
-        }
-      },
-      "inline_response_200_2": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "string",
-            "example": "Account has been deleted"
           }
         }
       }
