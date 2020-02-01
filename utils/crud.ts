@@ -4,7 +4,7 @@ import { Id, Account } from '../resources/accounts/accounts.model'
 import dbErrorHandler from './dbErrorHandler'
 
 type Model = {
-  findAll: () => QueryBuilder
+  findAll: (limit: number, sortBy: string, sortDir: string) => QueryBuilder
   findById: (id: Id) => QueryBuilder
   insert: (account: Account) => Promise<QueryBuilder>
   update: (id: Id, account: Account) => Promise<QueryBuilder | null>
@@ -14,11 +14,12 @@ type Model = {
 export const getMany = (
   model: Model
 ): ((_req: Request, res: Response) => Promise<void>) => async (
-  _req: Request,
+  req: Request,
   res: Response
 ): Promise<void> => {
+  const { limit, sortby: sortBy, sortdir: sortDir } = req.query
   try {
-    const items = await model.findAll()
+    const items = await model.findAll(limit, sortBy, sortDir)
     res.status(200).json(items)
   } catch (error) {
     dbErrorHandler(error, res)
