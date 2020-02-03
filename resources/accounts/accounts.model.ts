@@ -1,5 +1,6 @@
 import { QueryBuilder } from 'knex'
-import db from '../../data/dbConfig'
+
+const db = require('../../data/dbConfig')
 
 export type Account = {
   readonly name: string
@@ -30,7 +31,7 @@ export const findByName = (name: string): QueryBuilder =>
 export const insert = (account: Account): Promise<QueryBuilder> =>
   db('accounts')
     .insert(account, 'id')
-    .then(([id]) => findById(id))
+    .then(([id]: [number]) => findById(id))
 
 export const update = (
   id: Id,
@@ -39,7 +40,7 @@ export const update = (
   db('accounts')
     .where('id', Number(id))
     .update(account)
-    .then(count => count > 0 && findById(id))
+    .then((count: number) => count > 0 && findById(id))
 
 export const remove = (id: Id): QueryBuilder =>
   db('accounts')

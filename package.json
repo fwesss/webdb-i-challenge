@@ -9,7 +9,7 @@
     "format": "yarn run prettier --ignore-path .eslintignore --write",
     "lint": "eslint --ext .ts .",
     "prettier": "prettier --ignore-path .eslintignore \"**/*.+(json|js|ts)\"",
-    "server": "nodemon ./build/index.js",
+    "server": "tsc && nodemon ./build/index.js",
     "validate": "npm-run-all --parallel check-format lint"
   },
   "husky": {
