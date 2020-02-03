@@ -1,6 +1,6 @@
 import Knex from 'knex'
 
-const seed = (knex: Knex): Promise<number> =>
+exports.seed = (knex: Knex): Promise<number> =>
   knex('accounts')
     .truncate()
     .then(() =>
@@ -20,5 +20,3 @@ const seed = (knex: Knex): Promise<number> =>
         { name: 'account-13', budget: 1234.0 },
       ])
     )
-
-export default seed

@@ -13,6 +13,7 @@ export type Matcher = {
     Success: () => boolean
     Failure: () => boolean
   }) => boolean
+  value: string[]
 }
 
 export const didItValidate = (validationErrors: Matcher): boolean =>

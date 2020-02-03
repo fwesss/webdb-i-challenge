@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express'
 import Validation from 'folktale/validation'
 import { findById } from './accounts.model'
-import { validator, didItValidate } from '../../utils/validator'
+import { validator, didItValidate, Matcher } from '../../utils/validator'
 import controllers from './accounts.controllers'
 import dbErrorHandler from '../../utils/dbErrorHandler'
 
@@ -12,17 +12,23 @@ const router = express.Router()
 const hasBody = (req: Request): boolean => !!req.body
 const hasName = (req: Request): boolean => !!req.body.name
 const hasBudget = (req: Request): boolean => !!req.body.budget
+const realBudget = (req: Request): boolean =>
+  typeof req.body.budget === 'number' && req.body.mileage >= 0
 
 const bodyValidator = validator('Missing account data', hasBody)
 const nameValidator = validator('Missing name', hasName)
 const budgetValidator = validator('Missing budget', hasBudget)
+const realBudgetValidator = validator(
+  'Budget must be a positive number',
+  realBudget
+)
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const accountValidationResult = (req: Request): any =>
+const accountValidationResult = (req: Request): Matcher =>
   Success()
     .concat(bodyValidator(req))
     .concat(nameValidator(req))
     .concat(budgetValidator(req))
+    .concat(realBudgetValidator(req))
 
 const validateAccount = (
   req: Request,
@@ -43,8 +49,8 @@ const validateAccountId = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const project = await findById(req.params.id)
-    if (project) {
+    const account = await findById(req.params.id)
+    if (account) {
       next()
     } else {
       res.status(404).json({ error: 'Invalid account ID' })

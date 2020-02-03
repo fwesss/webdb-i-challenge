@@ -7,7 +7,7 @@
   ],
   "info": {
     "description": "Accounts API",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "title": "Accounts API",
     "contact": {
       "email": "feller.westley@gmail.com"
@@ -16,7 +16,7 @@
   "paths": {
     "/accounts": {
       "get": {
-        "summary": "retrieves all accounts",
+        "summary": "Retrieves queried accounts",
         "operationId": "retrieveAllAccounts",
         "description": "Get a list of all accounts",
         "parameters": [
@@ -24,7 +24,8 @@
             "in": "query",
             "name": "limit",
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             "description": "The number of accounts to return",
             "example": 5
@@ -33,7 +34,8 @@
             "in": "query",
             "name": "sortby",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": ["id", "name", "budget"]
             },
             "description": "The column to sort the accounts by",
             "example": "budget"
@@ -42,7 +44,8 @@
             "in": "query",
             "name": "sortdir",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": ["desc", "asc"]
             },
             "description": "The direction to sort the accounts",
             "example": "desc"
@@ -50,7 +53,7 @@
         ],
         "responses": {
           "200": {
-            "description": "all accounts",
+            "description": "Queried accounts",
             "content": {
               "application/json": {
                 "schema": {
@@ -101,7 +104,7 @@
             }
           },
           "500": {
-            "description": "server error",
+            "description": "Server error",
             "content": {
               "application/json": {
                 "schema": {
@@ -119,7 +122,7 @@
         }
       },
       "post": {
-        "summary": "adds an account",
+        "summary": "Adds an account",
         "operationId": "addAccount",
         "description": "Adds an account to the database",
         "responses": {
@@ -128,29 +131,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": ["id", "name", "budget"],
-                  "uniqueItems": true,
-                  "properties": {
-                    "id": {
-                      "type": "integer",
-                      "example": 1
-                    },
-                    "name": {
-                      "type": "string",
-                      "example": "ACME INC"
-                    },
-                    "budget": {
-                      "type": "integer",
-                      "example": 4267
-                    }
-                  }
+                  "$ref": "#/components/schemas/Account"
                 }
               }
             }
           },
           "400": {
-            "description": "invalid request object",
+            "description": "Invalid request object",
             "content": {
               "application/json": {
                 "schema": {
@@ -172,7 +159,7 @@
             "description": "name of accounts must be unique"
           },
           "500": {
-            "description": "server error",
+            "description": "Server error",
             "content": {
               "application/json": {
                 "schema": {
@@ -213,7 +200,7 @@
     },
     "/accounts/{id}": {
       "get": {
-        "summary": "retrieves a specified account",
+        "summary": "Retrieves a specified account",
         "operationId": "retrieveOneAccount",
         "description": "Get one account",
         "parameters": [
@@ -231,7 +218,7 @@
         ],
         "responses": {
           "200": {
-            "description": "one account",
+            "description": "One account",
             "content": {
               "application/json": {
                 "schema": {
@@ -256,7 +243,7 @@
             }
           },
           "404": {
-            "description": "invalid id",
+            "description": "Invalid id",
             "content": {
               "application/json": {
                 "schema": {
@@ -272,7 +259,7 @@
             }
           },
           "500": {
-            "description": "server error",
+            "description": "Server error",
             "content": {
               "application/json": {
                 "schema": {
@@ -290,7 +277,7 @@
         }
       },
       "put": {
-        "summary": "updates an account",
+        "summary": "Updates an account",
         "operationId": "updateOneAccount",
         "description": "Updates an account in the database",
         "parameters": [
@@ -308,7 +295,7 @@
         ],
         "responses": {
           "200": {
-            "description": "item updated",
+            "description": "Item updated",
             "content": {
               "application/json": {
                 "schema": {
@@ -334,7 +321,7 @@
             }
           },
           "400": {
-            "description": "invalid input, object invalid",
+            "description": "Invalid input, object invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -353,7 +340,7 @@
             }
           },
           "404": {
-            "description": "invalid id",
+            "description": "Invalid id",
             "content": {
               "application/json": {
                 "schema": {
@@ -377,7 +364,7 @@
                   "properties": {
                     "error": {
                       "type": "string",
-                      "example": "This account already exists"
+                      "example": "name of accounts must be unique"
                     }
                   }
                 }
@@ -385,7 +372,7 @@
             }
           },
           "500": {
-            "description": "server error",
+            "description": "Server error",
             "content": {
               "application/json": {
                 "schema": {
@@ -420,11 +407,11 @@
               }
             }
           },
-          "description": "account to update"
+          "description": "Account to update"
         }
       },
       "delete": {
-        "summary": "deletes an account",
+        "summary": "Deletes an account",
         "operationId": "deleteOneAccount",
         "description": "Deletes an account in the database",
         "parameters": [
@@ -442,7 +429,7 @@
         ],
         "responses": {
           "200": {
-            "description": "item deleted",
+            "description": "Item deleted",
             "content": {
               "application/json": {
                 "schema": {
@@ -474,7 +461,7 @@
             }
           },
           "500": {
-            "description": "server error",
+            "description": "Server error",
             "content": {
               "application/json": {
                 "schema": {
